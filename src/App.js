@@ -1,4 +1,5 @@
 import React from "react";
+import Message from "./Message";
 
 class App extends React.Component {
 	constructor(props) {
@@ -32,15 +33,19 @@ class App extends React.Component {
 	render(props) {
 		return (
 			<div className="App">
-				<ul id="messages">
-					{
-						this.state.messages.map(msg => <li key={msg}>{msg}</li>)
-					}
-				</ul>
-				<form onSubmit={this.sendMessage}>
-					<input type="text" name="message" id="message" value={this.state.currentMessage} onChange={this.handleChange} />
-					<input type="submit" value="Send" />
-				</form>
+				<div className="flex justify-center items-center h-screen">
+					<div>
+						<ol id="messages">
+							{
+								this.state.messages.map(msg => <Message key={msg}>{msg}</Message>)
+							}
+						</ol>
+						<form onSubmit={this.sendMessage}>
+							<input type="text" name="message" id="message" value={this.state.currentMessage} onChange={this.handleChange} className="border px-3 py-2 focus:outline-none w-96" />
+							<input type="submit" value="Send" className="px-3 py-2 w-24 hover:bg-gray-200 transition-colors" />
+						</form>
+					</div>
+				</div>
 			</div>
 		);
 	}
