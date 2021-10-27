@@ -35,7 +35,12 @@ class App extends React.Component {
 
 	sendMessage(e) {
 		e.preventDefault();
-		this.state.socket.send(this.state.currentMessage);
+		if(this.state.currentMessage.startsWith("/nick ")) {
+			this.state.socket.send("NICK " + this.state.currentMessage.substring(6));
+		}
+		else {
+			this.state.socket.send(this.state.currentMessage);
+		}
 		this.setState({currentMessage: ""});
 	}
 
@@ -48,7 +53,7 @@ class App extends React.Component {
 	}
 
 	acceptUsername() {
-		if(this.state.username !== "" && !this.state.username.includes(" ")) {
+		if(this.state.username !== "") {
 			this.setState({usernameSet: true});
 			this.state.socket.send(`JOIN ${this.state.username}`);
 		}
