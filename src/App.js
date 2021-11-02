@@ -35,15 +35,7 @@ class App extends React.Component {
 
 	sendMessage(e) {
 		e.preventDefault();
-		if(this.state.currentMessage.startsWith("/nick ")) { // Surely this sort of checking could be done purely on the server
-			this.state.socket.send("NICK " + this.state.currentMessage.substring(6));
-		}
-		else if(this.state.currentMessage.startsWith("/me ")) {
-			this.state.socket.send("ME " + this.state.currentMessage.substring(3));
-		}
-		else {
-			this.state.socket.send(this.state.currentMessage);
-		}
+		this.state.socket.send(this.state.currentMessage);
 		this.setState({currentMessage: ""});
 	}
 
