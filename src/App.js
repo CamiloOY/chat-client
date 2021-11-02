@@ -35,7 +35,7 @@ class App extends React.Component {
 
 	sendMessage(e) {
 		e.preventDefault();
-		if(this.state.currentMessage.startsWith("/nick ")) {
+		if(this.state.currentMessage.startsWith("/nick ")) { // Surely this sort of checking could be done purely on the server
 			this.state.socket.send("NICK " + this.state.currentMessage.substring(6));
 		}
 		else if(this.state.currentMessage.startsWith("/me ")) {
@@ -65,33 +65,35 @@ class App extends React.Component {
 	render(props) {
 		return (
 			<div className="App">
-				<div className="flex justify-center items-center h-screen">
 					{this.state.usernameSet ? (
-						<div>
-							<ol id="messages">
-								{
-									this.state.messages.map(msg => {
-										if(msg.username==="Server") {
-											return <Notification>{msg.text}</Notification>
-										}
-										else {
-											return <Message sender={msg.username} key={msg}>{msg.text}</Message>;
-										}
-									})
-								}
-							</ol>
-							<form onSubmit={this.sendMessage}>
-								<input type="text" name="message" id="message" value={this.state.currentMessage} onChange={this.handleChange} className="border px-3 py-2 focus:outline-none w-96" />
-								<input type="submit" value="Send" className="px-3 py-2 w-24 hover:bg-gray-200 transition-colors" />
-							</form>
+						<div className="h-screen flex flex-col justify-between">
+							<div className="max-h-full overflow-auto">
+								<ol id="messages">
+									{
+										this.state.messages.map(msg => {
+											if(msg.username==="Server") {
+												return <Notification>{msg.text}</Notification>
+											}
+											else {
+												return <Message sender={msg.username} key={msg}>{msg.text}</Message>;
+											}
+										})
+									}
+								</ol>
+							</div>
+								<form onSubmit={this.sendMessage} className="flex justify-center w-full px-2 my-2">
+									<input type="text" name="message" id="message" value={this.state.currentMessage} onChange={this.handleChange} className="border px-3 py-2 mr-2 rounded-lg w-full focus:outline-none focus:border-blue-400" />
+									<input type="submit" value="Send" className="px-6 py-1 w-24 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors cursor-pointer" />
+								</form>
 						</div>
 					) : (
-						<div className="">
-							<input type="text" name="username" value={this.state.username} placeholder="Username" onChange={this.handleUsername} id="username" className="border px-3 py-2 focus:outline-none w-96 focus:border-blue-400" />
-							<button type="submit" onClick={this.acceptUsername} className="px-3 py-2 bg-gray-100 hover:bg-gray-200 transition-colors">Start chatting</button>
+						<div className="flex justify-center items-center h-screen">
+							<div className="flex justify-center">
+								<input type="text" name="username" value={this.state.username} placeholder="Username" onChange={this.handleUsername} id="username" className="border px-3 py-2 mr-2 rounded-lg focus:outline-none w-96 focus:border-blue-400" />
+								<button type="submit" onClick={this.acceptUsername} className="px-6 py-1 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">Join</button>
+							</div>
 						</div>
 					)}
-				</div>
 			</div>
 		);
 	}
