@@ -10,7 +10,8 @@ class App extends React.Component {
 			messages: [],
 			currentMessage: "",
 			username: "",
-			usernameSet: false
+			usernameSet: false,
+			users: []
 		};
 		this.sendMessage = this.sendMessage.bind(this);
 		this.handleChange = this.handleChange.bind(this);
@@ -24,6 +25,19 @@ class App extends React.Component {
 				let messages = this.state.messages;
 				messages.push({username: "Server", text: e.data.substring(7)});
 				this.setState({messages});
+			}
+			else if(e.data.startsWith("USERS ")) {
+				this.setState({users: e.data.substring(6).split(" ")})
+			}
+			else if(e.data.startsWith("JOIN ")) {
+				let users = this.state.users;
+				users.push(e.data.substring(5));
+				this.setState({users});
+			}
+			else if(e.data.startsWith("LEAVE ")) {
+				let users = this.state.users;
+				users.splice(users.indexOf(e.data.substring(6)), 1);
+				this.setState({users});
 			}
 			else {
 				let messages = this.state.messages;
@@ -48,9 +62,10 @@ class App extends React.Component {
 	}
 
 	acceptUsername() {
-		if(this.state.username !== "") {
+		if(this.state.username !== "" && !this.state.username.match(/\s/g)) {
 			this.setState({usernameSet: true});
 			this.state.socket.send(`JOIN ${this.state.username}`);
+			this.state.socket.send("USERS");
 		}
 	}
 
@@ -67,7 +82,7 @@ class App extends React.Component {
 												return <Notification key={msg.text+Date.now()+i}>{msg.text}</Notification>
 											}
 											else {
-												return <Message sender={msg.username} key={msg.text+Date.now()+i} me={this.state.username}>{msg.text}</Message>;
+												return <Message sender={msg.username} key={msg.text+Date.now()+i} me={this.state.username} users={this.state.users}>{msg.text}</Message>;
 											}
 										})
 									}
