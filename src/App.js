@@ -39,6 +39,12 @@ class App extends React.Component {
 				users.splice(users.indexOf(e.data.substring(6)), 1);
 				this.setState({users});
 			}
+			else if(e.data.startsWith("NICK ")) {
+				let parts = e.data.split(" ");
+				let users = this.state.users;
+				users[users.indexOf(parts[1])] = parts[2];
+				this.setState({users});
+			}
 			else {
 				let messages = this.state.messages;
 				messages.push({username: e.data.split(":")[0], text: e.data.substring(e.data.indexOf(":") + 1)});
@@ -50,6 +56,9 @@ class App extends React.Component {
 	sendMessage(e) {
 		e.preventDefault();
 		this.state.socket.send(this.state.currentMessage);
+		if(this.state.currentMessage.match(/^\/nick [a-zA-Z]+$/)) {
+			this.setState({username: this.state.currentMessage.substring(6)});
+		}
 		this.setState({currentMessage: ""});
 	}
 
