@@ -62,12 +62,12 @@ class App extends React.Component {
 							<div className="max-h-full overflow-auto">
 								<ol id="messages">
 									{
-										this.state.messages.map(msg => {
+										this.state.messages.map((msg, i) => {
 											if(msg.username==="Server") {
-												return <Notification key={msg.text+Date.now()}>{msg.text}</Notification>
+												return <Notification key={msg.text+Date.now()+i}>{msg.text}</Notification>
 											}
 											else {
-												return <Message sender={msg.username} key={msg.text+Date.now()} me={this.state.username}>{msg.text}</Message>;
+												return <Message sender={msg.username} key={msg.text+Date.now()+i} me={this.state.username}>{msg.text}</Message>;
 											}
 										})
 									}
