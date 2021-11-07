@@ -9,7 +9,7 @@ export default function Message(props) {
 			<div className="font-bold text-sm">{props.sender}</div>
 			{
 				parts.map(item => {
-					if(item[0]==="@") {
+					if(item[0]==="@" && props.users.includes(item.substring(1))) {
 						return <span key={item+Date.now()} className="bg-yellow-200 px-1 rounded-md font-medium hover:bg-yellow-300 transition-colors">{item}</span>
 					}
 					else {
