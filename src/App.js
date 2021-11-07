@@ -9,7 +9,7 @@ class App extends React.Component {
 			socket: new WebSocket("ws://127.0.0.1:2020"),
 			messages: [],
 			currentMessage: "",
-			username: null,
+			username: "",
 			usernameSet: false
 		};
 		this.sendMessage = this.sendMessage.bind(this);
@@ -64,10 +64,10 @@ class App extends React.Component {
 									{
 										this.state.messages.map(msg => {
 											if(msg.username==="Server") {
-												return <Notification>{msg.text}</Notification>
+												return <Notification key={msg.text+Date.now()}>{msg.text}</Notification>
 											}
 											else {
-												return <Message sender={msg.username} key={msg}>{msg.text}</Message>;
+												return <Message sender={msg.username} key={msg.text+Date.now()} me={this.state.username}>{msg.text}</Message>;
 											}
 										})
 									}
